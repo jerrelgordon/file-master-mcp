@@ -1,0 +1,14 @@
+{
+    "allowed_directories": [
+        "/absolute/path/to/your/logs"
+    ],
+    "max_file_size_mb": 50,
+    "supported_extensions": [
+        ".log",
+        ".txt"
+    ],
+    "server_startup_timeout_seconds": 15,
+    "server_host": "127.0.0.1",
+    "server_port": 6466,
+    "allow_delete": false
+} 
