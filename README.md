@@ -2,6 +2,8 @@
 
 A secure Model Context Protocol (MCP) server for managing files and directories. This server provides LLMs with controlled access to files through a standardized interface.
 
+**Note:** "file_master_mcp.sh" is the script used for managing the server life cycle. The script is only compatible with Mac/Linux systems. Windows and Docker support are currently under development and will be available in future releases.
+
 ## Quick Start
 
 1. **Install Python**
@@ -10,7 +12,6 @@ A secure Model Context Protocol (MCP) server for managing files and directories.
 
 2. **Get the Code**
    ```bash
-   # Clone the repository
    git clone https://github.com/jerrelgordon/file-master-mcp
    cd file-master-mcp
    ```
@@ -18,8 +19,7 @@ A secure Model Context Protocol (MCP) server for managing files and directories.
 3. **Configure Your Directories**
    - Copy `config.json.template` to `config.json`:
    ```bash
-   cp config.json.template config.json   # On macOS/Linux
-   copy config.json.template config.json # On Windows
+   cp config.json.template config.json
    ```
    - Then edit `config.json` and add your directories:
    ```json
@@ -41,12 +41,13 @@ A secure Model Context Protocol (MCP) server for managing files and directories.
    ```
    The values shown above are the defaults from the template - adjust them according to your needs.
 
-4. **Start the Server**
+4. **Make the Script Executable**
    ```bash
-   # On Windows:
-   file_master_mcp.bat start
-   
-   # On macOS/Linux:
+   chmod +x file_master_mcp.sh
+   ```
+
+5. **Start the Server**
+   ```bash
    ./file_master_mcp.sh start
    ```
    The first time you run this, it will automatically:
@@ -59,12 +60,29 @@ That's it! Your server is now running and ready to use.
 
 To check if everything is working:
 ```bash
-# On Windows:
-file_master_mcp.bat status
-
-# On macOS/Linux:
 ./file_master_mcp.sh status
 ```
+
+## Cursor MCP Configuration
+
+To use this server with Cursor, you'll need to configure it in your Cursor MCP settings. Click on "add a new global MCP server" to access the global `mcp.json` - then paste the following json:
+
+```json
+{
+  "mcpServers": {
+    "file-master-mcp": {
+      "name": "File Master MCP Server",
+      "type": "sse",
+      "url": "http://127.0.0.1:6466/sse",
+      "transport": "sse",
+      "description": "A server for accessing and analyzing log files",
+      "version": "1.0.0"
+    }
+  }
+} 
+```
+
+Note: Other MCP clients (like Claude Desktop or others) may require different configuration formats. Please refer to their respective documentation for proper setup.
 
 ## Features
 
@@ -96,13 +114,6 @@ Edit `config.json` to customize your server. A template file `config.json.templa
 Simple commands to control the server:
 
 ```bash
-# On Windows:
-file_master_mcp.bat start   # Start server
-file_master_mcp.bat stop    # Stop server
-file_master_mcp.bat restart # Restart server
-file_master_mcp.bat status  # Check status
-
-# On macOS/Linux:
 ./file_master_mcp.sh start   # Start server
 ./file_master_mcp.sh stop    # Stop server
 ./file_master_mcp.sh restart # Restart server
@@ -164,7 +175,7 @@ The server creates two log files:
 ## Requirements
 
 - Python 3.7 or newer
-- Operating System: Windows, macOS, or Linux
+- Operating System: macOS, or Linux.
 - Dependencies (installed automatically):
   - uvicorn
   - starlette
